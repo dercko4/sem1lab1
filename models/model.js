@@ -86,7 +86,7 @@ Product.belongsTo(Warehouse)
 
 Order.hasOne(Basket_Product, {
     foreignKey: {
-        name: id_basket,
+        name: 'id_basket',
         type: DataTypes. UUID, primaryKey: true, defualtValue: sequelize.UUIDV4
     }
 })
