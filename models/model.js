@@ -14,9 +14,6 @@ const User = sequelize.define('users',{
 
 const Product = sequelize.define('products',{
     id_product: {type: DataTypes.UUID, primaryKey: true, defualtValue: sequelize.UUIDV4},
-    id_manufacturer: {type: DataTypes.UUID, primaryKey: true, defualtValue: sequelize.UUIDV4, references: {model: 'manufacturers', foreignKey: 'id_manufacturer'}},
-    id_category: {type: DataTypes.UUID, primaryKey: true, defualtValue: sequelize.UUIDV4, references: {model: 'categories', foreignKey: 'id_category'}},
-    id_warehouse: {type: DataTypes.UUID, primaryKey: true, defualtValue: sequelize.UUIDV4, references: {model: 'warehouses', foreignKey: 'id_warehouse'}},
     product_name: {type: DataTypes.STRING},
     expiration: {type: DataTypes.DATE},
     cost: {type: DataTypes.FLOAT},
@@ -45,25 +42,56 @@ const Category = sequelize.define('categories', {
 
 const Basket_Product = sequelize.define('basket_products', {
     id_basket: {type: DataTypes. UUID, primaryKey: true, defualtValue: sequelize.UUIDV4},
-    id_product: {type: DataTypes.UUID, primaryKey: true, defualtValue: sequelize.UUIDV4, references: {model: 'products', foreignKey: 'id_product'}},
     quantity_to_buy: {type: DataTypes.INTEGER}
 })
 
 const Order = sequelize.define('orders', {
     id_order: {type: DataTypes. UUID, primaryKey: true, defualtValue: sequelize.UUIDV4},
-    id_user: {type: DataTypes.UUID, primaryKey: true, defualtValue: sequelize.UUIDV4, references: {model: 'users', foreignKey: 'id_user'}},
-    id_basket: {type: DataTypes.UUID, primaryKey: true, defualtValue: sequelize.UUIDV4, references: {model: 'basket_products', foreignKey: 'id_basket'}},
     full_cost: {type: DataTypes.FLOAT},
     status: {type: DataTypes.STRING}
 })
 
-User.hasMany(Order)
+User.hasMany(Order, {
+    foreignKey: {
+        name: 'id_user',
+        type: DataTypes. UUID, primaryKey: true, defualtValue: sequelize.UUIDV4
+    }
+})
+Order.belongsTo(User)
 
-Manufacturer.hasMany(Product)
-Category.hasMany(Product)
-Warehouse.hasMany(Product)
+Manufacturer.hasMany(Product, {
+    foreignKey: {
+        name: 'id_product',
+        type: DataTypes. UUID, primaryKey: true, defualtValue: sequelize.UUIDV4
+    }
+})
+Product.belongsTo(Manufacturer)
 
-Order.hasOne(Basket_Product)
+
+Category.hasMany(Product, {
+    foreignKey: {
+        name: 'id_product',
+        type: DataTypes. UUID, primaryKey: true, defualtValue: sequelize.UUIDV4
+    }
+})
+Product.belongsTo(Category)
+
+Warehouse.hasMany(Product, {
+    foreignKey: {
+        name: 'id_product',
+        type: DataTypes. UUID, primaryKey: true, defualtValue: sequelize.UUIDV4
+    }
+})
+Product.belongsTo(Warehouse)
+
+Order.hasOne(Basket_Product, {
+    foreignKey: {
+        name: id_basket,
+        type: DataTypes. UUID, primaryKey: true, defualtValue: sequelize.UUIDV4
+    }
+})
+Basket_Product.belongsTo(Order)
+
 
 
 module.exports={
