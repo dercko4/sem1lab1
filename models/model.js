@@ -34,7 +34,7 @@ const Warehouse = sequelize.define('warehouses', {
 const Manufacturer = sequelize.define('manufacturers', {
     id_manufacturer: {type: DataTypes. UUID, primaryKey: true, defualtValue: sequelize.UUIDV4},
     contry: {type: DataTypes.STRING},
-    name_of_organization: {type: DataTypes.STIRNG}
+    name_of_organization: {type: DataTypes.STRING}
 })
 
 const Category = sequelize.define('categories', {
