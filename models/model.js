@@ -13,10 +13,10 @@ const User = sequelize.define('users',{
 })
 
 const Product = sequelize.define('products',{
-    id_product: {type: DataTypes. UUID, primaryKey: true, defualtValue: sequelize.UUIDV4},
-    id_manufacturer: {type: DataTypes. UUID, primaryKey: true, defualtValue: sequelize.UUIDV4, references: {model: 'manufacturers', foreignKey: 'id_manufacturer'}},
-    id_category: {type: DataTypes.INTEGER, primaryKey: true, references: 'categories', autoIncrement: true, referencesKey: 'id_category'},
-    id_warehouse: {type: DataTypes.INTEGER, primaryKey: true, references: 'warehouses', autoIncrement: true, referencesKey: 'id_warehouse'},
+    id_product: {type: DataTypes.UUID, primaryKey: true, defualtValue: sequelize.UUIDV4},
+    id_manufacturer: {type: DataTypes.UUID, primaryKey: true, defualtValue: sequelize.UUIDV4, references: {model: 'manufacturers', foreignKey: 'id_manufacturer'}},
+    id_category: {type: DataTypes.UUID, primaryKey: true, defualtValue: sequelize.UUIDV4, references: {model: 'categories', foreignKey: 'id_category'}},
+    id_warehouse: {type: DataTypes.UUID, primaryKey: true, defualtValue: sequelize.UUIDV4, references: {model: 'warehouses', foreignKey: 'id_warehouse'}},
     product_name: {type: DataTypes.STRING},
     expiration: {type: DataTypes.DATE},
     cost: {type: DataTypes.FLOAT},
@@ -26,7 +26,7 @@ const Product = sequelize.define('products',{
 })
 
 const Warehouse = sequelize.define('warehouses', {
-    id_warehouse: {type: DataTypes. UUID, primaryKey: true, defualtValue: sequelize.UUIDV4},
+    id_warehouse: {type: DataTypes.UUID, primaryKey: true, defualtValue: sequelize.UUIDV4},
     address: {type: DataTypes.STRING},
     capacity: {type: DataTypes.INTEGER}
 })
@@ -45,14 +45,14 @@ const Category = sequelize.define('categories', {
 
 const Basket_Product = sequelize.define('basket_products', {
     id_basket: {type: DataTypes. UUID, primaryKey: true, defualtValue: sequelize.UUIDV4},
-    id_product: {type: DataTypes.INTEGER, primaryKey: true, references: 'products', referencesKey: 'id_product'},
+    id_product: {type: DataTypes.UUID, primaryKey: true, defualtValue: sequelize.UUIDV4, references: {model: 'products', foreignKey: 'id_product'}},
     quantity_to_buy: {type: DataTypes.INTEGER}
 })
 
 const Order = sequelize.define('orders', {
     id_order: {type: DataTypes. UUID, primaryKey: true, defualtValue: sequelize.UUIDV4},
-    id_user: {type: DataTypes.INTEGER, primaryKey: true, references: 'users', referencesKey: 'id_user'},
-    id_basket: {type: DataTypes.INTEGER, primaryKey: true, references: 'basket_products', referencesKey: 'id_basket'},
+    id_user: {type: DataTypes.UUID, primaryKey: true, defualtValue: sequelize.UUIDV4, references: {model: 'users', foreignKey: 'id_user'}},
+    id_basket: {type: DataTypes.UUID, primaryKey: true, defualtValue: sequelize.UUIDV4, references: {model: 'basket_products', foreignKey: 'id_basket'}},
     full_cost: {type: DataTypes.FLOAT},
     status: {type: DataTypes.STRING}
 })
