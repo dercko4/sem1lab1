@@ -14,9 +14,9 @@ const User = sequelize.define('users',{
 
 const Product = sequelize.define('products',{
     id_product: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
-    id_manufacturer: {type: DataTypes.INTEGER, primaryKey: true, references: {model: 'manufacturers', foreignKey: 'id_manufacturer'}},
-    id_category: {type: DataTypes.INTEGER, primaryKey: true, references: 'categories', referencesKey: 'id_category'},
-    id_warehouse: {type: DataTypes.INTEGER, primaryKey: true, references: 'warehouses', referencesKey: 'id_warehouse'},
+    id_manufacturer: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true, references: {model: 'manufacturers', foreignKey: 'id_manufacturer'}},
+    id_category: {type: DataTypes.INTEGER, primaryKey: true, references: 'categories', autoIncrement: true, referencesKey: 'id_category'},
+    id_warehouse: {type: DataTypes.INTEGER, primaryKey: true, references: 'warehouses', autoIncrement: true, referencesKey: 'id_warehouse'},
     product_name: {type: DataTypes.STRING},
     expiration: {type: DataTypes.DATE},
     cost: {type: DataTypes.FLOAT},
