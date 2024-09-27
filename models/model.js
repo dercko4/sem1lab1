@@ -66,11 +66,11 @@ Warehouse.hasMany(Product)
 Order.hasOne(Basket_Product)
 
 
-module.exports(
+module.exports={
     User,
     Product,
     Warehouse,
     Category,
     Basket_Product,
     Order
-)
+}
