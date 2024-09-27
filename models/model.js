@@ -28,7 +28,7 @@ const Product = sequelize.define('products',{
 const Warehouse = sequelize.define('warehouses', {
     id_warehouse: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
     address: {type: DataTypes.STRING},
-    capacity: {DataTypes:INTEGER}
+    capacity: {type: DataTypes.INTEGER}
 })
 
 const Manufacturer = sequelize.define('manufacturers', {
