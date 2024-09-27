@@ -40,7 +40,7 @@ const Manufacturer = sequelize.define('manufacturers', {
 const Category = sequelize.define('categories', {
     id_category: {type: DataTypes. UUID, primaryKey: true, defualtValue: sequelize.UUIDV4},
     category_name: {type: DataTypes.STRING},
-    is_product_weight_category: {type: DataTypes.BOOLEN}
+    is_product_weight_category: {type: DataTypes.BOOL}
 })
 
 const Basket_Product = sequelize.define('basket_products', {
