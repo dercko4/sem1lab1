@@ -12,6 +12,12 @@ const User = sequelize.define('users',{
     address: {type: DataTypes.STRING}
 })
 
+const Manufacturer = sequelize.define('manufacturers', {
+    id_manufacturer: {type: DataTypes. UUID, primaryKey: true, defualtValue: sequelize.UUIDV4},
+    contry: {type: DataTypes.STRING},
+    name_of_organization: {type: DataTypes.STRING}
+})
+
 const Product = sequelize.define('products',{
     id_product: {type: DataTypes.UUID, primaryKey: true, defualtValue: sequelize.UUIDV4},
     id_manufacturer: {type: DataTypes. UUID, primaryKey: true, defualtValue: sequelize.UUIDV4, references: {model: Manufacturer, key: 'id_manufacturer'}},
@@ -30,11 +36,6 @@ const Warehouse = sequelize.define('warehouses', {
     capacity: {type: DataTypes.INTEGER}
 })
 
-const Manufacturer = sequelize.define('manufacturers', {
-    id_manufacturer: {type: DataTypes. UUID, primaryKey: true, defualtValue: sequelize.UUIDV4},
-    contry: {type: DataTypes.STRING},
-    name_of_organization: {type: DataTypes.STRING}
-})
 
 const Category = sequelize.define('categories', {
     id_category: {type: DataTypes. UUID, primaryKey: true, defualtValue: sequelize.UUIDV4},
