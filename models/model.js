@@ -94,7 +94,7 @@ Product.belongsTo(Warehouse)
 Product.hasMany(Basket_Product, {
     foreignKey: {
         model: Basket_Product,
-        name: 'id_product'
+        name: 'id_basket'
     }
 })
 Basket_Product.belongsTo(Product)
