@@ -33,7 +33,7 @@ const Category = sequelize.define('categories', {
 
 const Product = sequelize.define('products',{
     id_product: {type: DataTypes.UUID, primaryKey: true, defualtValue: sequelize.UUIDV4},
-    id_manufacturer: {type: DataTypes. UUID, primaryKey: true, defualtValue: sequelize.UUIDV4, references: {model: Manufacturer, key: 'id_manufacturer'}},
+    id_manufacturer: {type: DataTypes.UUID, primaryKey: true, defualtValue: sequelize.UUIDV4, references: {model: Manufacturer, key: 'id_manufacturer'}},
     id_category: {type: DataTypes. UUID, primaryKey: true, defualtValue: sequelize.UUIDV4, references: {model: Category, key: 'id_category'}},
     id_warehouse: {type: DataTypes.UUID, primaryKey: true, defualtValue: sequelize.UUIDV4, references: {model: Warehouse, key: 'id_warehouse'}},
     product_name: {type: DataTypes.STRING},
@@ -45,7 +45,7 @@ const Product = sequelize.define('products',{
 
 
 const Basket_Product = sequelize.define('basket_products', {
-    id_basket: {type: DataTypes. UUID, primaryKey: true, defualtValue: sequelize.UUIDV4},
+    id_basket: {type: DataTypes.UUID, primaryKey: true, defualtValue: sequelize.UUIDV4},
     id_product: {type: DataTypes.UUID, primaryKey: true, defualtValue: sequelize.UUIDV4, references: {model: Product, key: 'id_product'}},
     quantity_to_buy: {type: DataTypes.INTEGER}
 })
