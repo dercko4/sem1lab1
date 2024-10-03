@@ -14,7 +14,7 @@ const User = sequelize.define('users',{
 
 const Product = sequelize.define('products',{
     id_product: {type: DataTypes.UUID, primaryKey: true, defualtValue: sequelize.UUIDV4},
-    id_manufacturer: {type: DataTypes. UUID, primaryKey: true, defualtValue: sequelize.UUIDV4},
+    id_manufacturer: {type: DataTypes. UUID, primaryKey: true, defualtValue: sequelize.UUIDV4, references: {model: Manufacturer, key: 'id_manufacturer'}},
     id_category: {type: DataTypes. UUID, primaryKey: true, defualtValue: sequelize.UUIDV4},
     id_warehouse: {type: DataTypes.UUID, primaryKey: true, defualtValue: sequelize.UUIDV4},
     product_name: {type: DataTypes.STRING},
@@ -57,10 +57,7 @@ const Order = sequelize.define('orders', {
 })
 
 User.hasMany(Order, {
-    foreignKey: {
-        model: Order,
-        name: 'id_user',
-    }
+    foreignKey: ''
 })
 Order.belongsTo(User)
 
