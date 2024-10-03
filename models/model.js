@@ -24,18 +24,21 @@ const Product = sequelize.define('products',{
 
 const Warehouse = sequelize.define('warehouses', {
     id_warehouse: {type: DataTypes.UUID, primaryKey: true, defualtValue: sequelize.UUIDV4},
+    id_product: {type: DataTypes.UUID, primaryKey: true, defualtValue: sequelize.UUIDV4},
     address: {type: DataTypes.STRING},
     capacity: {type: DataTypes.INTEGER}
 })
 
 const Manufacturer = sequelize.define('manufacturers', {
     id_manufacturer: {type: DataTypes. UUID, primaryKey: true, defualtValue: sequelize.UUIDV4},
+    id_product: {type: DataTypes.UUID, primaryKey: true, defualtValue: sequelize.UUIDV4},
     contry: {type: DataTypes.STRING},
     name_of_organization: {type: DataTypes.STRING}
 })
 
 const Category = sequelize.define('categories', {
     id_category: {type: DataTypes. UUID, primaryKey: true, defualtValue: sequelize.UUIDV4},
+    id_product: {type: DataTypes.UUID, primaryKey: true, defualtValue: sequelize.UUIDV4},
     category_name: {type: DataTypes.STRING},
     is_product_weight_category: {type: DataTypes.BOOLEAN}
 })
@@ -47,6 +50,8 @@ const Basket_Product = sequelize.define('basket_products', {
 
 const Order = sequelize.define('orders', {
     id_order: {type: DataTypes. UUID, primaryKey: true, defualtValue: sequelize.UUIDV4},
+    id_basket: {type: DataTypes. UUID, primaryKey: true, defualtValue: sequelize.UUIDV4},
+    id_user: {type: DataTypes. UUID, primaryKey: true, defualtValue: sequelize.UUIDV4},
     full_cost: {type: DataTypes.FLOAT},
     status: {type: DataTypes.STRING}
 })
