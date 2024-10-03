@@ -46,6 +46,7 @@ const Product = sequelize.define('products',{
 
 const Basket_Product = sequelize.define('basket_products', {
     id_basket: {type: DataTypes.UUID, primaryKey: true, defualtValue: sequelize.UUIDV4},
+    id_order: {type: DataTypes. UUID, primaryKey: true, defualtValue: sequelize.UUIDV4, references: {model: Order, key: 'id_order'}},
     id_product: {type: DataTypes.UUID, primaryKey: true, defualtValue: sequelize.UUIDV4, references: {model: Product, key: 'id_product'}},
     quantity_to_buy: {type: DataTypes.INTEGER}
 })
