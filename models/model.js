@@ -58,8 +58,12 @@ const Order = sequelize.define('orders', {
   status: {type: DataTypes.STRING}
 })
 
-User.hasMany(Order)
-User.hasMany(Basket_Product)
+User.hasMany(Order, {
+    foreignKey: 'id_order'
+})
+User.hasMany(Basket_Product, {
+    foreignKey: 'id_basket'
+})
 
 Manufacturer.hasMany(Product, {
   foreignKey: 'id_manufacturer',
