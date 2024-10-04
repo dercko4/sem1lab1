@@ -60,7 +60,6 @@ const Order = sequelize.define('orders', {
 
 User.hasMany(Order)
 User.hasMany(Basket_Product)
-Order.belongsTo(User)
 
 Manufacturer.hasMany(Product, {
   foreignKey: 'id_manufacturer',
