@@ -59,10 +59,10 @@ const Order = sequelize.define('orders', {
 })
 
 User.hasMany(Order, {
-    foreignKey: 'id_order'
+    foreignKey: 'id_user'
 })
 User.hasMany(Basket_Product, {
-    foreignKey: 'id_basket'
+    foreignKey: 'id_user'
 })
 
 Manufacturer.hasMany(Product, {
