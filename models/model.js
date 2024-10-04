@@ -87,12 +87,12 @@ Warehouse.hasMany(Product, {
     }
 })
 
-Product.hasMany(Basket_Product, {
-    foreignKey: {
-        model: Basket_Product,
-        name: 'id_product'
-    }
-})
+// Product.hasMany(Basket_Product, {
+//     foreignKey: {
+//         model: Basket_Product,
+//         name: 'id_product'
+//     }
+// })
 Basket_Product.belongsTo(Product)
 
 Order.hasOne(Basket_Product, {
