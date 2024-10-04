@@ -44,19 +44,19 @@ const Product = sequelize.define('products',{
 })
 
 
-const Basket_Product = sequelize.define('basket_products', {
-    id_basket: {type: DataTypes.UUID, primaryKey: true, defualtValue: sequelize.UUIDV4},
-    id_product: {type: DataTypes.UUID, primaryKey: true, defualtValue: sequelize.UUIDV4, references: {model: Product, key: 'id_product'}},
-    quantity_to_buy: {type: DataTypes.INTEGER}
-})
+// const Basket_Product = sequelize.define('basket_products', {
+//     id_basket: {type: DataTypes.UUID, primaryKey: true, defualtValue: sequelize.UUIDV4},
+//     id_product: {type: DataTypes.UUID, primaryKey: true, defualtValue: sequelize.UUIDV4, references: {model: Product, key: 'id_product'}},
+//     quantity_to_buy: {type: DataTypes.INTEGER}
+// })
 
-const Order = sequelize.define('orders', {
-    id_order: {type: DataTypes. UUID, primaryKey: true, defualtValue: sequelize.UUIDV4},
-    id_basket: {type: DataTypes. UUID, primaryKey: true, defualtValue: sequelize.UUIDV4, references: {model: Basket_Product, key: 'id_basket'}},
-    id_user: {type: DataTypes. UUID, primaryKey: true, defualtValue: sequelize.UUIDV4, references: {model: Manufacturer, key: 'id_user'}},
-    full_cost: {type: DataTypes.FLOAT},
-    status: {type: DataTypes.STRING}
-})
+// const Order = sequelize.define('orders', {
+//     id_order: {type: DataTypes. UUID, primaryKey: true, defualtValue: sequelize.UUIDV4},
+//     id_basket: {type: DataTypes. UUID, primaryKey: true, defualtValue: sequelize.UUIDV4, references: {model: Basket_Product, key: 'id_basket'}},
+//     id_user: {type: DataTypes. UUID, primaryKey: true, defualtValue: sequelize.UUIDV4, references: {model: Manufacturer, key: 'id_user'}},
+//     full_cost: {type: DataTypes.FLOAT},
+//     status: {type: DataTypes.STRING}
+// })
 
 User.hasMany(Order, {
     foreignKey: {
@@ -93,14 +93,14 @@ Warehouse.hasMany(Product, {
 //         name: 'id_product'
 //     }
 // })
-Basket_Product.belongsTo(Product)
+// Basket_Product.belongsTo(Product)
 
-Order.hasOne(Basket_Product, {
-    foreignKey: {
-        model: Basket_Product,
-        name: 'id_basket',
-    }
-})
+// Order.hasOne(Basket_Product, {
+//     foreignKey: {
+//         model: Basket_Product,
+//         name: 'id_basket',
+//     }
+// })
 
 
 
@@ -109,6 +109,6 @@ module.exports={
     Product,
     Warehouse,
     Category,
-    Basket_Product,
-    Order
+    // Basket_Product,
+    // Order
 }
