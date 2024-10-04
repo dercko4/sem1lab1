@@ -112,7 +112,7 @@ class CreateUser {
                 return
             }
             
-            const token = generateJwt((user.id_user, user.role)
+            const token = generateJwt(user.id_user, user.role)
             return res.status(200).json({token})
         } catch (error) {
             next()
