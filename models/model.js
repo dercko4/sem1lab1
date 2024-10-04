@@ -79,7 +79,6 @@ Category.hasMany(Product, {
         name: 'id_product',
     }
 })
-Product.belongsTo(Category)
 
 Warehouse.hasMany(Product, {
     foreignKey: {
@@ -91,7 +90,7 @@ Warehouse.hasMany(Product, {
 Product.hasMany(Basket_Product, {
     foreignKey: {
         model: Basket_Product,
-        name: 'id_basket'
+        name: 'id_product'
     }
 })
 Basket_Product.belongsTo(Product)
