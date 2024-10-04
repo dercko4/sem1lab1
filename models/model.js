@@ -58,12 +58,12 @@ const Product = sequelize.define('products',{
 //     status: {type: DataTypes.STRING}
 // })
 
-User.hasMany(Order, {
-    foreignKey: {
-        model: Order,
-        name: 'id_order'
-    }
-})
+// User.hasMany(Order, {
+//     foreignKey: {
+//         model: Order,
+//         name: 'id_order'
+//     }
+// })
 
 Manufacturer.hasMany(Product, {
     foreignKey: {
