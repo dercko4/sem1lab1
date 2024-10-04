@@ -64,7 +64,6 @@ User.hasMany(Order, {
         name: 'id_order'
     }
 })
-Order.belongsTo(User)
 
 Manufacturer.hasMany(Product, {
     foreignKey: {
@@ -72,7 +71,6 @@ Manufacturer.hasMany(Product, {
         name: 'id_product',
     }
 })
-Product.belongsTo(Manufacturer)
 
 
 Category.hasMany(Product, {
@@ -89,7 +87,6 @@ Warehouse.hasMany(Product, {
         name: 'id_product',
     }
 })
-Product.belongsTo(Warehouse)
 
 Product.hasMany(Basket_Product, {
     foreignKey: {
@@ -105,7 +102,6 @@ Order.hasOne(Basket_Product, {
         name: 'id_basket',
     }
 })
-Basket_Product.belongsTo(Order)
 
 
 
