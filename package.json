@@ -14,7 +14,8 @@
         "pg": "^8.11.3",
         "pg-hstore": "^2.3.4",
         "pug": "^3.0.2",
-        "sequelize": "^6.37.3"
+        "sequelize": "^6.37.4",
+        "uuid": "^10.0.0"
     },
     "name": "server",
     "version": "1.0.0",

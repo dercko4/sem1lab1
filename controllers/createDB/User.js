@@ -1,6 +1,10 @@
 const { Sequelize } = require('../../database')
-const { User } = require('../../models/model')
+const { User} = require('../../models/model')
 const ApiError = require('../../ApiError')
+const { Op }= require("sequelize");
+const bcrypt = require('bcrypt')
+const uuid = require('uuid')
+const jwt = require('jsonwebtoken')
 
 const generateJwt = (id_user, role) => {
     return jwt.sign(
@@ -16,7 +20,7 @@ class CreateUser {
         try {
             const { FIO, phone, email, password, passwordCheck, address} = req.body
             if (!email&password || !phone&password) {
-                return next(ApiError.badRequest('Введите эл.почту, телефон и придумайте пароль'))
+                return next(ApiError.badRequest('Введите эл.почту или телефон, а затем придумайте пароль'))
             }
             if (!passwordCheck) {
                 return next(ApiError.badRequest('Введите пароль еще раз'))
@@ -24,30 +28,25 @@ class CreateUser {
             if (password !== passwordCheck) {
                 return next(ApiError.badRequest('Пароли не совпадают'))
             }
-            let array
-            if(!phone) {
-                array = [email]
+            let candidate
+            if(!phone){
+                candidate = await User.findOne({where: {email: email}})
             }
             if(!email)
-            {
-                array = [phone]
+            {   
+                candidate = await User.findOne({where: {phone:phone}})
             }
-            if(email && phone){
-                array = [email, phone]
-            }
-            const candidate = await User.findOne({
-                where: { [Sequelize.db.Op.or]: array }
-            })
             if (candidate) {
-                return next(ApiError.badRequest('Пользователь с такой почтой или телефоном уже существует'))
+                return next(ApiError.badRequest('Пользователь с такой почтой уже существует'))
             }
+            
             if (!passwordCheck) {
                 return next(ApiError.badRequest("Повторно введите ваш пароль"))
             }
             if (password == passwordCheck) {
                 const hashpassword = await bcrypt.hash(password, 5)
                 const user = await User.create({
-                    FIO, phone, email, password: hashpassword, address
+                    id_user: uuid.v4() ,FIO, phone, email, password: hashpassword, address
                 })
                 const token = generateJwt(user.id_user, user.role)
                 return res.json({token})
@@ -102,4 +101,4 @@ class CreateUser {
     }
 }
 
-module.exports=new CreateUser()
+module.exports= new CreateUser()
