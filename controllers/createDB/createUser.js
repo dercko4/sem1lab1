@@ -16,19 +16,13 @@ class CreateUser {
         try {
             const { FIO, phone, email, password, passwordCheck, address} = req.body
             if (!email&password || !phone&password) {
-                res.status(401).json({ message: 'Введите эл.почту или телефон и придумайте пароль' })
-                //return next(ApiError.badRequest('Введите эл.почту, телефон и придумайте пароль'))
-                return
+                return next(ApiError.badRequest('Введите эл.почту, телефон и придумайте пароль'))
             }
             if (!passwordCheck) {
-                res.status(402).json({ message: 'Введите пароль еще раз' })
-                //return next(ApiError.badRequest('Введите пароль еще раз'))
-                return
+                return next(ApiError.badRequest('Введите пароль еще раз'))
             }
             if (password !== passwordCheck) {
-                res.status(403).json({ message: 'Пароли не совпадают' })
-                //return next(ApiError.badRequest('Пароли не совпадают'))
-                return
+                return next(ApiError.badRequest('Пароли не совпадают'))
             }
             const obj = { email, phone }
             let condition = []
@@ -60,10 +54,9 @@ class CreateUser {
                     FIO, phone, email, password: hashpassword, address
                 })
                 const token = generateJwt(user.id_user, user.role)
-                return res.status(200).json({ token })
+                return res.json({token})
             }
-            else res.status(200).json({ message: "Пароли не совпадают" })
-            //return next(ApiError.badRequest('Пароли не совпадают'))
+            else return next(ApiError.badRequest('Пароли не совпадают'))
 
         }
         catch (error) {
@@ -75,15 +68,11 @@ class CreateUser {
     async login(req,res,next){
         try {
             const {email, phone, password} = req.body
-            if(!(email||phone)){
-                res.status(401).json({message:'Введите эл.почту/телефон'})            
-                //return next(ApiError.badRequest('Введите эл.почту / телефон и пароль'))
-                return
+            if(!(email||phone)){          
+                return next(ApiError.badRequest('Введите эл.почту / телефон и пароль'))
                 }
-            if(!password){
-                res.status(402).json({message:'Введите пароль'})            
-                //return next(ApiError.badRequest('Введите эл.почту / телефон и пароль'))
-                return
+            if(!password){    
+                return next(ApiError.badRequest('Введите эл.почту / телефон и пароль'))
             }
             const obj={email,phone} //объект для динамического условия из-за возможности не вводить почту или телефон
             let condition = []
@@ -99,17 +88,13 @@ class CreateUser {
                 where:{[Op.or]:condition}
             })
             if(!user){
-                res.status(403).json({message:'Введен неверный email/телефон или нет учётной записи'})
-                //return next(ApiError.internal('Введен неверный email/телефон или нет учётной записи'))
-                return
+                return next(ApiError.internal('Введен неверный email/телефон или нет учётной записи'))
             }
     
             //Сравнение незашифрованного пароля password с зашифрованным user.password (password:hashpassword)
             let comparePassword = bcrypt.compareSync(password, user.password)
             if(!comparePassword){ //если пароли не совпадают
-                res.status(404).json({message:'Указан неверный пароль'})
-                //return next(ApiError.internal("Указан неверный пароль"))
-                return
+                return next(ApiError.internal("Указан неверный пароль"))
             }
             
             const token = generateJwt(user.id_user, user.role)
