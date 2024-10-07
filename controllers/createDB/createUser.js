@@ -60,7 +60,7 @@ class CreateUser {
 
         }
         catch (error) {
-            next()
+            next(ApiError.badRequest("Что-то пошло не так"))
             console.log(error)
         }
     }
@@ -100,7 +100,7 @@ class CreateUser {
             const token = generateJwt(user.id_user, user.role)
             return res.status(200).json({token})
         } catch (error) {
-            next()
+            next(ApiError.badRequest("Что-то пошло не так"))
             console.log(error)
         }
     }
