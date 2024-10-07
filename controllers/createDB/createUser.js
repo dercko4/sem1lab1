@@ -25,7 +25,7 @@ class CreateUser {
                 return next(ApiError.badRequest('Пароли не совпадают'))
             }
             const obj = { email, phone }
-            let condition = []
+            let condition = new Array()
             console.log("Свойства объекта:", Object.entries(obj))
             condition = Object.entries(obj).reduce((accum, [key, value]) => {
                 if (value) {  //запись в условие значений не являющихся null или undefined
