@@ -24,23 +24,19 @@ class CreateUser {
             if (password !== passwordCheck) {
                 return next(ApiError.badRequest('Пароли не совпадают'))
             }
-            const obj = { email, phone }
-            let condition
-            console.log("Свойства объекта:", Object.entries(obj))
-            condition = Object.entries(obj).reduce((accum, [key, value]) => {
-                if (value) {  //запись в условие значений не являющихся null или undefined
-                    accum[key] = value
-                    console.log("accum[key]=", accum[key])
-                    console.log("value=", value)
-                }
-                console.log("accum=", accum)
-                return accum
-            }, {}) //используем объект как первичное значение accum
-            for (let value of condition) {
-                console.log(value)
+            let array
+            if(!phone) {
+                array = [email]
+            }
+            if(!email)
+            {
+                array = [phone]
+            }
+            if(email && phone){
+                array = [email, phone]
             }
             const candidate = await User.findOne({
-                where: { [Op.or]: condition }
+                where: { [Op.or]: array }
             })
             if (candidate) {
                 return next(ApiError.badRequest('Пользователь с такой почтой или телефоном уже существует'))
