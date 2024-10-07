@@ -1,4 +1,4 @@
-const { Sequelize } = require('../database')
+const { Sequelize } = require('../../database')
 const { User } = require('../../models/model')
 const ApiError = require('../../ApiError')
 
