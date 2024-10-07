@@ -36,7 +36,7 @@ class CreateUser {
                 array = [email, phone]
             }
             const candidate = await User.findOne({
-                where: { [Op.or]: array }
+                where: { [Sequelize.db.Op.or]: array }
             })
             if (candidate) {
                 return next(ApiError.badRequest('Пользователь с такой почтой или телефоном уже существует'))
