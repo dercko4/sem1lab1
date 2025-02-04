@@ -43,10 +43,10 @@ class CreateUser {
             if (!passwordCheck) {
                 return next(ApiError.badRequest("Повторно введите ваш пароль"))
             }
+            let passwordHash = await bcrypt.hash(password, 5)
             if (password == passwordCheck) {
-                const hashpassword = await bcrypt.hash(password, 5)
                 const user = await User.create({
-                    id_user: uuid.v4() ,FIO, phone, email, password: hashpassword, address
+                    id_user: uuid.v4() ,FIO, phone, email, password: passwordHash, address
                 })
                 const token = generateJwt(user.id_user, user.role)
                 return res.json({token})
@@ -62,41 +62,31 @@ class CreateUser {
 
     async login(req,res,next){
         try {
-            const {email, phone, password} = req.body
-            if(!(email||phone)){          
-                return next(ApiError.badRequest('Введите эл.почту / телефон и пароль'))
-                }
-            if(!password){    
-                return next(ApiError.badRequest('Введите эл.почту / телефон и пароль'))
+            const { email, password } = req.body
+            if (!email) {
+                res.status(500).json({message: 'Email должен быть не пустым!'})
+                return
             }
-            const obj={email,phone} //объект для динамического условия из-за возможности не вводить почту или телефон
-            let condition = []
-            condition = Object.entries(obj).reduce((accum,[key,value])=>{ //запись в accum пар [key,value]
-                if(value) { //запись значений не являющихся undefined или null
-                    accum[key]=value
-                }
-                return accum
-            },{}) //используем объект как первичное значение accum
-            console.log(condition)
-    
-            const user = await User.findOne({
-                where:{[Op.or]:condition}
-            })
-            if(!user){
-                return next(ApiError.internal('Введен неверный email/телефон или нет учётной записи'))
+            if (!password) {
+                res.status(500).json({message: 'Пароль должен быть не пустым!'})
+                return
             }
-    
-            //Сравнение незашифрованного пароля password с зашифрованным user.password (password:hashpassword)
+            const user = await User.findOne({ where: { email } })
+            if (!user) {
+                res.status(500).json({message: 'Пользователь не найден!'})
+                return
+            }
             let comparePassword = bcrypt.compareSync(password, user.password)
-            if(!comparePassword){ //если пароли не совпадают
-                return next(ApiError.internal("Указан неверный пароль"))
+            if (!comparePassword) {
+                res.status(500).json({message: "Пароли не совпадают!"})
+                return
             }
-            
             const token = generateJwt(user.id_user, user.role)
-            return res.status(200).json({token})
+            res.json({ token })
         } catch (error) {
-            next(ApiError.badRequest("Что-то пошло не так"))
             console.log(error)
+            res.status(500).json({message: "Что-то пошло не так"})
+            return
         }
     }
 }
