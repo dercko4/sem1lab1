@@ -1,25 +1,29 @@
 const { Sequelize } = require('../../database')
-const { User} = require('../../models/model')
+const { User } = require('../../models/model')
 const ApiError = require('../../ApiError')
-const { Op }= require("sequelize");
+const { Op } = require("sequelize");
 const bcrypt = require('bcrypt')
 const uuid = require('uuid')
 const jwt = require('jsonwebtoken')
 
 const generateJwt = (id_user, role) => {
     return jwt.sign(
-        {id_user, role},
+        { id_user, role },
         process.env.SECRET_KEY,
-        {expiresIn:'24h'}
+        { expiresIn: '24h' }
     )
 }
 
 
+function removeEmpty(obj) {
+    return Object.fromEntries(Object.entries(obj).filter(([_, v]) => v != null));
+  }
+
 class CreateUser {
     async registration(req, res, next) {
         try {
-            const { FIO, phone, email, password, passwordCheck, address} = req.body
-            if (!email&password || !phone&password) {
+            const { FIO, phone, email, password, passwordCheck, address } = req.body
+            if (!email & password || !phone & password) {
                 return next(ApiError.badRequest('Введите эл.почту или телефон, а затем придумайте пароль'))
             }
             if (!passwordCheck) {
@@ -29,27 +33,26 @@ class CreateUser {
                 return next(ApiError.badRequest('Пароли не совпадают'))
             }
             let candidate
-            if(!phone){
-                candidate = await User.findOne({where: {email: email}})
+            if (!phone) {
+                candidate = await User.findOne({ where: { email: email } })
             }
-            if(!email)
-            {   
-                candidate = await User.findOne({where: {phone:phone}})
+            if (!email) {
+                candidate = await User.findOne({ where: { phone: phone } })
             }
             if (candidate) {
                 return next(ApiError.badRequest('Пользователь с такой почтой уже существует'))
             }
-            
+
             if (!passwordCheck) {
                 return next(ApiError.badRequest("Повторно введите ваш пароль"))
             }
             let passwordHash = await bcrypt.hash(password, 5)
             if (password == passwordCheck) {
                 const user = await User.create({
-                    id_user: uuid.v4() ,FIO, phone, email, password: passwordHash, address
+                    id_user: uuid.v4(), FIO, phone, email, password: passwordHash, address
                 })
                 const token = generateJwt(user.id_user, user.role)
-                return res.json({token})
+                return res.json({ token })
             }
             else return next(ApiError.badRequest('Пароли не совпадают'))
 
@@ -60,35 +63,48 @@ class CreateUser {
         }
     }
 
-    async login(req,res,next){
+    async login(req, res, next) {
         try {
             const { email, password } = req.body
             if (!email) {
-                res.status(500).json({message: 'Email должен быть не пустым!'})
+                res.status(500).json({ message: 'Email должен быть не пустым!' })
                 return
             }
             if (!password) {
-                res.status(500).json({message: 'Пароль должен быть не пустым!'})
+                res.status(500).json({ message: 'Пароль должен быть не пустым!' })
                 return
             }
             const user = await User.findOne({ where: { email } })
             if (!user) {
-                res.status(500).json({message: 'Пользователь не найден!'})
+                res.status(500).json({ message: 'Пользователь не найден!' })
                 return
             }
             let comparePassword = bcrypt.compareSync(password, user.password)
             if (!comparePassword) {
-                res.status(500).json({message: "Пароли не совпадают!"})
+                res.status(500).json({ message: "Пароли не совпадают!" })
                 return
             }
             const token = generateJwt(user.id_user, user.role)
             res.json({ token })
         } catch (error) {
             console.log(error)
-            res.status(500).json({message: "Что-то пошло не так"})
+            res.status(500).json({ message: "Что-то пошло не так" })
             return
         }
     }
+
+    async changeProfile(req, res, next) {
+        try {
+            const id_user = req.user.id_user
+            const data = req.body.data
+            const prefData = removeEmpty(data)
+            
+        } catch (error) {
+            console.log(error)
+            return
+        }
+
+    }
 }
 
-module.exports= new CreateUser()
+module.exports = new CreateUser()
