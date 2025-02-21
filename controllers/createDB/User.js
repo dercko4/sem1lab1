@@ -17,20 +17,20 @@ const generateJwt = (id_user, role) => {
 
 function removeEmpty(obj) {
     return Object.fromEntries(Object.entries(obj).filter(([_, v]) => v != null));
-  }
+}
 
 class CreateUser {
     async registration(req, res, next) {
         try {
             const { FIO, phone, email, password, passwordCheck, address } = req.body
             if (!email & password || !phone & password) {
-                return next(ApiError.badRequest('Введите эл.почту или телефон, а затем придумайте пароль'))
+                return res.status(500).json({ message: 'Введите эл.почту или телефон, а затем придумайте пароль' })
             }
             if (!passwordCheck) {
-                return next(ApiError.badRequest('Введите пароль еще раз'))
+                return res.status(500).json({ message: 'Введите пароль еще раз' })
             }
             if (password !== passwordCheck) {
-                return next(ApiError.badRequest('Пароли не совпадают'))
+                return res.status(500).json({ message: 'Пароли не совпадают' })
             }
             let candidate
             if (!phone) {
@@ -40,11 +40,11 @@ class CreateUser {
                 candidate = await User.findOne({ where: { phone: phone } })
             }
             if (candidate) {
-                return next(ApiError.badRequest('Пользователь с такой почтой уже существует'))
+                return res.status(500).json({ message: 'Пользователь с такой почтой уже существует' })
             }
 
             if (!passwordCheck) {
-                return next(ApiError.badRequest("Повторно введите ваш пароль"))
+                return res.status(500).json({ message: "Повторно введите ваш пароль" })
             }
             let passwordHash = await bcrypt.hash(password, 5)
             if (password == passwordCheck) {
@@ -52,13 +52,13 @@ class CreateUser {
                     id_user: uuid.v4(), FIO, phone, email, password: passwordHash, address
                 })
                 const token = generateJwt(user.id_user, user.role)
-                return res.json({ token })
+                return res.json({ token: token })
             }
-            else return next(ApiError.badRequest('Пароли не совпадают'))
+            else return res.status(500).json({ message: 'Пароли не совпадают' })
 
         }
         catch (error) {
-            next(ApiError.badRequest("Что-то пошло не так"))
+            res.status(500).json({ message: "Что-то пошло не так" })
             console.log(error)
         }
     }
@@ -85,7 +85,7 @@ class CreateUser {
                 return
             }
             const token = generateJwt(user.id_user, user.role)
-            res.json({ token })
+            res.json({ token: token })
         } catch (error) {
             console.log(error)
             res.status(500).json({ message: "Что-то пошло не так" })
@@ -98,7 +98,8 @@ class CreateUser {
             const id_user = req.user.id_user
             const data = req.body.data
             const prefData = removeEmpty(data)
-            
+            console.log(prefData)
+
         } catch (error) {
             console.log(error)
             return
