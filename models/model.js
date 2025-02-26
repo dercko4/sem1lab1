@@ -4,7 +4,7 @@ const { DataTypes, UUIDV1, UUIDV4 } = require('sequelize')
 const User = sequelize.define('users', {
   id_user: { type: DataTypes.UUID, primaryKey: true, defualtValue: UUIDV4 },
   FIO: { type: DataTypes.STRING, allowNull: true },
-  phone: { type: DataTypes.INTEGER },
+  phone: { type: DataTypes.BIGINT },
   email: { type: DataTypes.STRING, unique: true },
   password: { type: DataTypes.STRING, allowNull: true },
   role: { type: DataTypes.STRING, defaultValue: "user" },
