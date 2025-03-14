@@ -5,9 +5,6 @@ const authMiddleware = require('../../authMiddleware')
 
 
 routes.post('/create', Manufacturer.createManufacturer)
-routes.get('/get', Manufacturer.selectManufacturers)
-routes.patch('/patch', authMiddleware, Manufacturer.updateUser)
-routes.delete('/delete', authMiddleware, Manufacturer.destroyUser)
 
 
 module.exports=routes

@@ -1,7 +1,6 @@
-const { Sequelize } = require('../../database')
+const { Sequelize, where } = require('../../database')
 const { User } = require('../../models/model')
 const ApiError = require('../../ApiError')
-const { Op } = require("sequelize");
 const bcrypt = require('bcrypt')
 const uuid = require('uuid')
 const jwt = require('jsonwebtoken')
@@ -14,10 +13,10 @@ const generateJwt = (id_user, role) => {
     )
 }
 
-
 function removeEmpty(obj) {
-    return Object.fromEntries(Object.entries(obj).filter(([_, v]) => v != null));
+    return Object.fromEntries(Object.entries(obj).filter(([_, v]) => v != ''));
 }
+
 
 class CreateUser {
     async registration(req, res, next) {
@@ -96,15 +95,61 @@ class CreateUser {
     async changeProfile(req, res, next) {
         try {
             const id_user = req.user.id_user
-            const data = req.body.data
-            const prefData = removeEmpty(data)
-            console.log(prefData)
-
+            const { FIO: FIO, phone: phone, email: email, address: address, password: password, checkPassword: checkPassword } = req.body.data
+            const updatedUser = await User.update({ FIO: FIO, phone: phone, email: email, address: address, password: password, checkPassword: checkPassword }, { where: { id_user } })
         } catch (error) {
             console.log(error)
             return
         }
 
+    }
+
+    async findAllUsers(req, res, next) {
+        try {
+            const allManufatrurers = await User.findAll()
+            return res.json(allManufatrurers)
+        } catch (error) {
+            res.status(500).json({ message: "Что-то пошло не так" })
+            console.log(error)
+        }
+    }
+
+    async updateUser(req, res, next) {
+        try {
+            const id_user = req.user.id_user
+            const { phone } = req.body.data
+            const candidate = await User.findOne({ where: { id_user: id_user } })
+            if (!candidate) return res.status(500).json({ message: "Не найден пользователь с таким id_user" })
+            const newUser = await User.update({ phone: phone }, { where: { id_user: id_user } })
+            return res.json({ message: `Пользователь с ID=${id_user} обновил телефон на ${phone}` })
+        } catch (error) {
+            res.status(500).json({ message: "Что-то пошло не так" })
+            console.log(error)
+        }
+    }
+
+    async destroyUser(req, res, next) {
+        try {
+            const id_user = req.user.id_user
+            const candidate = await User.findOne({ where: { id_user: id_user } })
+            if (!candidate) return res.status(500).json(("Не найден пользователь с таким id_user"));
+            const destoryUser = await User.destroy({ where: { id_user: id_user } })
+            return res.json({ message: `Вы уничтожили себя :). Ваш ID был: ${id_user}` })
+        } catch (error) {
+            res.status(500).json({ message: "Что-то пошло не так" })
+            console.log(error)
+        }
+    }
+
+    async findOneUser(req, res, next) {
+        try {
+            const id_user = req.user.id_user
+            const user = await User.findOne({where: {id_user}})
+            res.json(user)
+        } catch (error) {
+            res.status(500).json({ message: "Что-то пошло не так" })
+            console.log(error)
+        }
     }
 }
 
