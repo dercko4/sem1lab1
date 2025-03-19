@@ -130,11 +130,12 @@ class CreateUser {
 
     async destroyUser(req, res, next) {
         try {
-            const id_user = req.user.id_user
+            console.log(req.body)
+            const { id_user } = req.body
             const candidate = await User.findOne({ where: { id_user: id_user } })
             if (!candidate) return res.status(500).json(("Не найден пользователь с таким id_user"));
             const destoryUser = await User.destroy({ where: { id_user: id_user } })
-            return res.json({ message: `Вы уничтожили себя :). Ваш ID был: ${id_user}` })
+            return res.json({ message: `Вы уничтожили человека. ID был: ${id_user}` })
         } catch (error) {
             res.status(500).json({ message: "Что-то пошло не так" })
             console.log(error)
@@ -144,7 +145,7 @@ class CreateUser {
     async findOneUser(req, res, next) {
         try {
             const id_user = req.user.id_user
-            const user = await User.findOne({where: {id_user}})
+            const user = await User.findOne({ where: { id_user } })
             res.json(user)
         } catch (error) {
             res.status(500).json({ message: "Что-то пошло не так" })
