@@ -4,6 +4,8 @@ const ApiError = require('../../ApiError')
 const bcrypt = require('bcrypt')
 const uuid = require('uuid')
 const jwt = require('jsonwebtoken')
+const NodeCache = require("node-cache")
+const myCache = new NodeCache()
 
 const generateJwt = (id_user, role) => {
     return jwt.sign(
@@ -146,6 +148,7 @@ class CreateUser {
         try {
             const id_user = req.user.id_user
             const user = await User.findOne({ where: { id_user } })
+            const data = myCache.set("key", user.dataValues, 20000)
             res.json(user)
         } catch (error) {
             res.status(500).json({ message: "Что-то пошло не так" })
